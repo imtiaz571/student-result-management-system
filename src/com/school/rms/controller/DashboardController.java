@@ -23,6 +23,7 @@ public class DashboardController {
         List<Student> students = repository.getAllStudents();
         if (index >= 0 && index < students.size()) {
             students.set(index, student);
+            repository.saveStudents();
         }
     }
 
@@ -43,5 +44,9 @@ public class DashboardController {
 
     public void deleteStudentByObject(Student student) {
         repository.removeStudent(student);
+    }
+
+    public void saveChanges() {
+        repository.saveStudents();
     }
 }

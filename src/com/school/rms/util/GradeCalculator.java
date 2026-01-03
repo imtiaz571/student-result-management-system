@@ -26,9 +26,7 @@ public class GradeCalculator {
         }
     }
 
-    /**
-     * Calculate grade information based on marks
-     */
+    
     public static GradeInfo calculateGrade(double marks) {
         if (marks >= 80) {
             return new GradeInfo(4.00, "A+", "Outstanding");
@@ -53,10 +51,7 @@ public class GradeCalculator {
         }
     }
 
-    /**
-     * Calculate overall CGPA from list of subjects
-     * If any subject has failed (marks < 40), overall CGPA = 0.00
-     */
+    
     public static double calculateOverallCGPA(java.util.List<com.school.rms.model.Subject> subjects) {
         if (subjects == null || subjects.isEmpty()) {
             return 0.00;
@@ -65,10 +60,10 @@ public class GradeCalculator {
         double totalGradePoints = 0;
         int count = 0;
 
-        // Check for failures first
+        
         for (com.school.rms.model.Subject subject : subjects) {
             if (subject.getMarks() < 40) {
-                return 0.00; // Failed - overall CGPA is 0
+                return 0.00; 
             }
             totalGradePoints += subject.getCgpa();
             count++;
@@ -77,6 +72,6 @@ public class GradeCalculator {
         if (count == 0)
             return 0.00;
 
-        return Math.round((totalGradePoints / count) * 100.0) / 100.0; // Round to 2 decimal places
+        return Math.round((totalGradePoints / count) * 100.0) / 100.0; 
     }
 }

@@ -30,9 +30,9 @@ public class TableActionCellEditor extends DefaultCellEditor {
         panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
         panel.setOpaque(false);
 
-        cmdMenu = new TableActionButton("⋮"); // Vertical ellipsis
+        cmdMenu = new TableActionButton("⋮"); 
 
-        // Create popup menu
+        
         popupMenu = new JPopupMenu();
         JMenuItem editItem = new JMenuItem("Edit");
         JMenuItem deleteItem = new JMenuItem("Delete");

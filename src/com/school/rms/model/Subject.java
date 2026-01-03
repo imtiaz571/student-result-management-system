@@ -2,7 +2,8 @@ package com.school.rms.model;
 
 import com.school.rms.util.GradeCalculator;
 
-public class Subject {
+public class Subject implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     private String subjectName;
     private double marks;
     private double cgpa;
@@ -15,7 +16,6 @@ public class Subject {
         updateGradeInfo();
     }
 
-    // Constructor for backward compatibility
     public Subject(String subjectName, double marks, double cgpa) {
         this.subjectName = subjectName;
         this.marks = marks;

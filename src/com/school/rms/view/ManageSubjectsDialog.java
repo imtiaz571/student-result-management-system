@@ -26,7 +26,7 @@ public class ManageSubjectsDialog extends JDialog {
         setLayout(new BorderLayout(10, 10));
         getContentPane().setBackground(Color.WHITE);
 
-        // Title panel
+        
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.setBackground(new Color(245, 245, 250));
         titlePanel.setBorder(new EmptyBorder(15, 20, 15, 20));
@@ -35,10 +35,10 @@ public class ManageSubjectsDialog extends JDialog {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titlePanel.add(titleLabel, BorderLayout.WEST);
 
-        // Table panel
+        
         JPanel tablePanel = createTablePanel();
 
-        // Button panel
+        
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.setBorder(new EmptyBorder(0, 20, 20, 20));
@@ -72,28 +72,28 @@ public class ManageSubjectsDialog extends JDialog {
         panel.setBackground(Color.WHITE);
         panel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-        // Create table
+        
         String[] columnNames = { "Subject Name", "Marks", "Letter Grade", "CGPA", "Remarks" };
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column <= 1; // Only subject name and marks are editable
+                return column <= 1; 
             }
 
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 if (columnIndex == 1) {
-                    return Double.class; // Marks column stores numbers
+                    return Double.class; 
                 }
                 return String.class;
             }
         };
 
-        // Populate with existing subjects
+        
         for (Subject subject : student.getSubjects()) {
             Object[] row = {
                     subject.getSubjectName(),
-                    subject.getMarks(), // Store as double, not formatted string
+                    subject.getMarks(), 
                     subject.getLetterGrade(),
                     String.format("%.2f", subject.getCgpa()),
                     subject.getRemarks()
@@ -108,15 +108,15 @@ public class ManageSubjectsDialog extends JDialog {
         subjectsTable.getTableHeader().setBackground(new Color(240, 240, 245));
         subjectsTable.setShowVerticalLines(false);
 
-        // Add tooltip for user guidance
+        
         subjectsTable.setToolTipText("Double-click on Subject Name or Marks column to edit");
 
-        // Make editing more responsive - single click to select, double click to edit
+        
         subjectsTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
-        // Add listener to update grade info when marks change
+        
         tableModel.addTableModelListener(e -> {
-            if (e.getColumn() == 1) { // Marks column
+            if (e.getColumn() == 1) { 
                 int row = e.getFirstRow();
                 try {
                     Object marksObj = tableModel.getValueAt(row, 1);
@@ -128,13 +128,13 @@ public class ManageSubjectsDialog extends JDialog {
                         marks = Double.parseDouble(marksObj.toString());
                     }
 
-                    // Validate marks range
+                    
                     if (marks < 0 || marks > 100) {
                         JOptionPane.showMessageDialog(this,
                                 "Marks must be between 0 and 100",
                                 "Invalid Marks",
                                 JOptionPane.ERROR_MESSAGE);
-                        // Reset to previous valid value or 0
+                        
                         tableModel.setValueAt(0.0, row, 1);
                         marks = 0;
                     }
@@ -144,7 +144,7 @@ public class ManageSubjectsDialog extends JDialog {
                     tableModel.setValueAt(String.format("%.2f", tempSubject.getCgpa()), row, 3);
                     tableModel.setValueAt(tempSubject.getRemarks(), row, 4);
                 } catch (NumberFormatException ex) {
-                    // Invalid number, show error
+                    
                     JOptionPane.showMessageDialog(this,
                             "Please enter a valid number for marks (0-100)",
                             "Invalid Input",
@@ -186,7 +186,7 @@ public class ManageSubjectsDialog extends JDialog {
                         Subject subject = new Subject(subjectName.trim(), marks);
                         Object[] row = {
                                 subject.getSubjectName(),
-                                marks, // Store as double
+                                marks, 
                                 subject.getLetterGrade(),
                                 String.format("%.2f", subject.getCgpa()),
                                 subject.getRemarks()
@@ -229,7 +229,7 @@ public class ManageSubjectsDialog extends JDialog {
                     student.addSubject(new Subject(subjectName, marks));
                 }
             } catch (NumberFormatException e) {
-                // Skip invalid rows
+                
             }
         }
     }

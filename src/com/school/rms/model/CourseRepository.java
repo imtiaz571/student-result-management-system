@@ -12,7 +12,7 @@ public class CourseRepository {
         }
 
         private void initializeDummyData() {
-                // Sample data with batch and student names
+                
                 courses.add(new Course("1", "22.11.2022", "Spring 2024", "Inequalities in Numbers", "Topic Explanation",
                                 "Ahmed Hassan", "Published"));
                 courses.add(
@@ -36,7 +36,7 @@ public class CourseRepository {
         }
 
         public List<Course> getAllCourses() {
-                return courses; // In a real app, return a copy
+                return courses; 
         }
 
         public void addCourse(Course course) {

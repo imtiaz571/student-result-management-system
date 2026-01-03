@@ -13,11 +13,11 @@ public class TableActionCellRenderer extends JPanel implements TableCellRenderer
     private JButton cmdMenu;
 
     public TableActionCellRenderer() {
-        setOpaque(false); // Transparent background to show table selection
+        setOpaque(false); 
         setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
 
-        // 3-dot menu button
-        cmdMenu = new TableActionButton("⋮"); // Vertical ellipsis
+        
+        cmdMenu = new TableActionButton("⋮"); 
         cmdMenu.setForeground(Theme.TEXT_SECONDARY);
 
         add(cmdMenu);
@@ -27,16 +27,16 @@ public class TableActionCellRenderer extends JPanel implements TableCellRenderer
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
             int row, int column) {
         if (isSelected) {
-            // Adjust colors if selected if needed
+            
         }
         return this;
     }
 
-    // Inner class for simple styling
+    
     private class TableActionButton extends JButton {
         public TableActionButton(String text) {
             super(text);
-            setFont(Theme.FONT_TITLE); // Larger font for icon
+            setFont(Theme.FONT_TITLE); 
             setBorderPainted(false);
             setContentAreaFilled(false);
             setFocusPainted(false);

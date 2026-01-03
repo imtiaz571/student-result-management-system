@@ -6,7 +6,8 @@ import com.school.rms.model.Student;
 
 public class StudentTableModel extends AbstractTableModel {
     private List<Student> students;
-    private String[] columnNames = { "Student Name", "Session", "Batch", "Department", "Overall CGPA", "Actions" };
+    private String[] columnNames = { "ID", "Student Name", "Session", "Batch", "Department", "Overall CGPA",
+            "Actions" };
 
     public StudentTableModel(List<Student> students) {
         this.students = students;
@@ -32,17 +33,19 @@ public class StudentTableModel extends AbstractTableModel {
         Student student = students.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return student.getName();
+                return student.getId();
             case 1:
-                return student.getSession();
+                return student.getName();
             case 2:
-                return student.getBatch();
+                return student.getSession();
             case 3:
-                return student.getDepartment();
+                return student.getBatch();
             case 4:
-                return String.format("%.2f", student.getOverallCGPA());
+                return student.getDepartment();
             case 5:
-                return ""; // Actions column
+                return String.format("%.2f", student.getOverallCGPA());
+            case 6:
+                return "";
             default:
                 return null;
         }
@@ -50,7 +53,7 @@ public class StudentTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex == 5; // Only Actions column is editable
+        return columnIndex == 6;
     }
 
     public Student getStudentAt(int row) {

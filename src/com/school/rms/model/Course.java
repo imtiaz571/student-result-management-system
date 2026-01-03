@@ -3,13 +3,12 @@ package com.school.rms.model;
 public class Course {
     private String id;
     private String date;
-    private String batch; // e.g., "Spring 2024", "Fall 2023"
-    private String subject; // Topic
+    private String batch;
+    private String subject;
     private String teacher;
-    private String studentName; // Student name
-    private String publicationStatus; // "Published", "Draft"
+    private String studentName;
+    private String publicationStatus;
 
-    // Constructor
     public Course(String id, String date, String batch, String subject, String teacher, String studentName,
             String publicationStatus) {
         this.id = id;
@@ -21,7 +20,6 @@ public class Course {
         this.publicationStatus = publicationStatus;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

@@ -31,10 +31,8 @@ public class MainDashboard extends JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(Theme.BACKGROUND_COLOR);
 
-        // Main Layout
         setLayout(new BorderLayout(20, 20));
 
-        // Create Layout Sections
         add(createTopPanel(), BorderLayout.NORTH);
         add(createTablePanel(), BorderLayout.CENTER);
     }
@@ -45,16 +43,13 @@ public class MainDashboard extends JFrame {
         container.setOpaque(false);
         container.setBorder(new EmptyBorder(20, 30, 0, 30));
 
-        // 1. Header (Search)
         JPanel headerInfo = new JPanel(new BorderLayout());
         headerInfo.setOpaque(false);
 
-        // Search Bar (Left)
         searchField = new JTextField("Search...");
         searchField.setPreferredSize(new Dimension(300, 35));
         searchField.setForeground(Color.GRAY);
 
-        // Add focus listener to clear placeholder
         searchField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
@@ -73,7 +68,6 @@ public class MainDashboard extends JFrame {
             }
         });
 
-        // Add document listener for real-time search
         searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
             public void insertUpdate(javax.swing.event.DocumentEvent e) {
@@ -93,7 +87,6 @@ public class MainDashboard extends JFrame {
 
         headerInfo.add(searchField, BorderLayout.WEST);
 
-        // Filter Bar - Only Add Student button
         JPanel filterBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         filterBar.setOpaque(false);
         filterBar.setBorder(new EmptyBorder(15, 0, 15, 0));
@@ -106,7 +99,6 @@ public class MainDashboard extends JFrame {
 
         filterBar.add(addStudentBtn);
 
-        // Combine
         container.add(headerInfo);
         container.add(Box.createVerticalStrut(10));
         container.add(filterBar);
@@ -122,17 +114,16 @@ public class MainDashboard extends JFrame {
         tableModel = new StudentTableModel(controller.getAllStudents());
         studentTable = new JTable(tableModel);
 
-        // Apply Renderers
         studentTable.setDefaultRenderer(Object.class, new StatusBadge());
 
-        // Specific Column Renderers
-        studentTable.getColumnModel().getColumn(0).setCellRenderer(new StatusBadge()); // Student Name
-        studentTable.getColumnModel().getColumn(1).setCellRenderer(new StatusBadge()); // Batch
-        studentTable.getColumnModel().getColumn(2).setCellRenderer(new StatusBadge()); // Department
-        studentTable.getColumnModel().getColumn(3).setCellRenderer(new StatusBadge()); // CGPA
+        studentTable.getColumnModel().getColumn(0).setCellRenderer(new StatusBadge());
+        studentTable.getColumnModel().getColumn(1).setCellRenderer(new StatusBadge());
+        studentTable.getColumnModel().getColumn(2).setCellRenderer(new StatusBadge());
+        studentTable.getColumnModel().getColumn(3).setCellRenderer(new StatusBadge());
+        studentTable.getColumnModel().getColumn(4).setCellRenderer(new StatusBadge());
+        studentTable.getColumnModel().getColumn(5).setCellRenderer(new StatusBadge());
 
-        // Action Column
-        studentTable.getColumnModel().getColumn(4).setCellRenderer(new TableActionCellRenderer());
+        studentTable.getColumnModel().getColumn(6).setCellRenderer(new TableActionCellRenderer());
         TableActionCellEditor actionEditor = new TableActionCellEditor();
         actionEditor.setActionListener(new TableActionCellEditor.ActionListener() {
             @Override
@@ -145,17 +136,15 @@ public class MainDashboard extends JFrame {
                 deleteStudent(row);
             }
         });
-        studentTable.getColumnModel().getColumn(4).setCellEditor(actionEditor);
+        studentTable.getColumnModel().getColumn(6).setCellEditor(actionEditor);
 
-        // Add mouse listener to make student name clickable
         studentTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int row = studentTable.rowAtPoint(e.getPoint());
                 int column = studentTable.columnAtPoint(e.getPoint());
 
-                // If clicked on Student Name column (column 0)
-                if (column == 0 && row >= 0) {
+                if (column == 1 && row >= 0) {
                     Student student = tableModel.getStudentAt(row);
                     if (student != null) {
                         showStudentDetails(student);
@@ -164,7 +153,6 @@ public class MainDashboard extends JFrame {
             }
         });
 
-        // Style the table
         studentTable.setRowHeight(50);
         studentTable.setShowVerticalLines(false);
         studentTable.setIntercellSpacing(new Dimension(0, 0));
@@ -187,14 +175,13 @@ public class MainDashboard extends JFrame {
         tableModel = new StudentTableModel(controller.getAllStudents());
         studentTable.setModel(tableModel);
 
-        // Reapply renderers and editor (now 6 columns: Name, Session, Batch, Dept,
-        // CGPA, Actions)
         studentTable.getColumnModel().getColumn(0).setCellRenderer(new StatusBadge());
         studentTable.getColumnModel().getColumn(1).setCellRenderer(new StatusBadge());
         studentTable.getColumnModel().getColumn(2).setCellRenderer(new StatusBadge());
         studentTable.getColumnModel().getColumn(3).setCellRenderer(new StatusBadge());
         studentTable.getColumnModel().getColumn(4).setCellRenderer(new StatusBadge());
-        studentTable.getColumnModel().getColumn(5).setCellRenderer(new TableActionCellRenderer());
+        studentTable.getColumnModel().getColumn(5).setCellRenderer(new StatusBadge());
+        studentTable.getColumnModel().getColumn(6).setCellRenderer(new TableActionCellRenderer());
 
         TableActionCellEditor actionEditor = new TableActionCellEditor();
         actionEditor.setActionListener(new TableActionCellEditor.ActionListener() {
@@ -208,18 +195,18 @@ public class MainDashboard extends JFrame {
                 deleteStudent(row);
             }
         });
-        studentTable.getColumnModel().getColumn(5).setCellEditor(actionEditor);
+        studentTable.getColumnModel().getColumn(6).setCellEditor(actionEditor);
     }
 
     private void showStudentDetails(Student student) {
         StudentDetailsDialog dialog = new StudentDetailsDialog(this, student);
         dialog.setVisible(true);
-        // Refresh table in case subjects were modified
+
         refreshTable();
     }
 
     private void showAddStudentDialog() {
-        StudentDialog dialog = new StudentDialog(this, null);
+        StudentDialog dialog = new StudentDialog(this, null, controller.getAllStudents());
         dialog.setVisible(true);
 
         if (dialog.isConfirmed()) {
@@ -232,11 +219,12 @@ public class MainDashboard extends JFrame {
     private void showEditStudentDialog(int row) {
         Student student = tableModel.getStudentAt(row);
         if (student != null) {
-            StudentDialog dialog = new StudentDialog(this, student);
+            StudentDialog dialog = new StudentDialog(this, student, controller.getAllStudents());
             dialog.setVisible(true);
 
             if (dialog.isConfirmed()) {
-                // Student object is already updated in place
+                dialog.getStudent();
+                controller.saveChanges();
                 refreshTable();
             }
         }
@@ -263,33 +251,33 @@ public class MainDashboard extends JFrame {
     private void filterStudents() {
         String searchText = searchField.getText().trim();
 
-        // If search is placeholder text or empty, show all students
         if (searchText.equals("Search...") || searchText.isEmpty()) {
             refreshTable();
             return;
         }
 
-        // Filter students by name
         java.util.List<Student> allStudents = controller.getAllStudents();
         java.util.List<Student> filteredStudents = new java.util.ArrayList<>();
 
         for (Student student : allStudents) {
-            if (student.getName().toLowerCase().contains(searchText.toLowerCase())) {
+            String lowerSearch = searchText.toLowerCase();
+            if (student.getName().toLowerCase().contains(lowerSearch) ||
+                    student.getId().toLowerCase().contains(lowerSearch) ||
+                    student.getBatch().toLowerCase().contains(lowerSearch)) {
                 filteredStudents.add(student);
             }
         }
 
-        // Update table with filtered students
         tableModel = new StudentTableModel(filteredStudents);
         studentTable.setModel(tableModel);
 
-        // Reapply renderers and editor (6 columns)
         studentTable.getColumnModel().getColumn(0).setCellRenderer(new StatusBadge());
         studentTable.getColumnModel().getColumn(1).setCellRenderer(new StatusBadge());
         studentTable.getColumnModel().getColumn(2).setCellRenderer(new StatusBadge());
         studentTable.getColumnModel().getColumn(3).setCellRenderer(new StatusBadge());
         studentTable.getColumnModel().getColumn(4).setCellRenderer(new StatusBadge());
-        studentTable.getColumnModel().getColumn(5).setCellRenderer(new TableActionCellRenderer());
+        studentTable.getColumnModel().getColumn(5).setCellRenderer(new StatusBadge());
+        studentTable.getColumnModel().getColumn(6).setCellRenderer(new TableActionCellRenderer());
 
         TableActionCellEditor actionEditor = new TableActionCellEditor();
         actionEditor.setActionListener(new TableActionCellEditor.ActionListener() {
@@ -303,6 +291,6 @@ public class MainDashboard extends JFrame {
                 deleteStudent(row);
             }
         });
-        studentTable.getColumnModel().getColumn(5).setCellEditor(actionEditor);
+        studentTable.getColumnModel().getColumn(6).setCellEditor(actionEditor);
     }
 }

@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import com.school.rms.util.GradeCalculator;
 
-public class Student {
+public class Student implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     private String id;
     private String name;
-    private String session; // Spring, Autumn, Summer
-    private String batch; // 1, 2, 3, etc.
+    private String session;
+    private String batch;
     private String department;
     private double overallCGPA;
     private List<Subject> subjects;
@@ -67,9 +68,6 @@ public class Student {
         return overallCGPA;
     }
 
-    /**
-     * Recalculate overall CGPA based on subjects
-     */
     public void calculateOverallCGPA() {
         this.overallCGPA = GradeCalculator.calculateOverallCGPA(subjects);
     }

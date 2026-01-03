@@ -20,7 +20,7 @@ public class CustomButton extends JButton {
     public CustomButton(String text, Color baseColor, Color textColor) {
         super(text);
         this.normalColor = baseColor;
-        // Make hover slightly darker or simpler logic
+        
         this.hoverColor = darken(baseColor, 0.95);
         this.pressColor = darken(baseColor, 0.9);
 

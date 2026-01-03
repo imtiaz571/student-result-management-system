@@ -16,11 +16,11 @@ public class StatusBadge extends JLabel implements TableCellRenderer {
     private Color badgeColor = Theme.BACKGROUND_COLOR;
 
     public StatusBadge() {
-        setOpaque(false); // We paint the background manually
+        setOpaque(false);
         setForeground(Color.BLACK);
         setFont(Theme.FONT_REGULAR);
         setHorizontalAlignment(JLabel.CENTER);
-        setBorder(new EmptyBorder(4, 12, 4, 12)); // Padding for pill shape
+        setBorder(new EmptyBorder(4, 12, 4, 12));
     }
 
     @Override
@@ -28,32 +28,26 @@ public class StatusBadge extends JLabel implements TableCellRenderer {
             int row, int column) {
         setText(value != null ? value.toString() : "");
 
-        // Apply colors based on column (for student table)
-        // Column 0: Student Name (white)
-        // Column 1: Session (light green)
-        // Column 2: Batch (yellow)
-        // Column 3: Department (light cyan)
-        // Column 4: Overall CGPA (light purple)
-
         switch (column) {
-            case 0: // Student Name - white/light gray
+            case 0:
+            case 1:
                 badgeColor = Color.WHITE;
                 setForeground(Color.BLACK);
                 break;
-            case 1: // Session - light green
-                badgeColor = new Color(232, 245, 233); // Light green
+            case 2:
+                badgeColor = new Color(232, 245, 233);
                 setForeground(Color.BLACK);
                 break;
-            case 2: // Batch - yellow
-                badgeColor = new Color(255, 251, 230); // Light yellow
+            case 3:
+                badgeColor = new Color(255, 251, 230);
                 setForeground(Color.BLACK);
                 break;
-            case 3: // Department - light cyan
-                badgeColor = new Color(224, 247, 250); // Light cyan
+            case 4:
+                badgeColor = new Color(224, 247, 250);
                 setForeground(Color.BLACK);
                 break;
-            case 4: // Overall CGPA - light purple
-                badgeColor = new Color(237, 231, 246); // Light purple
+            case 5:
+                badgeColor = new Color(237, 231, 246);
                 setForeground(Color.BLACK);
                 break;
             default:
@@ -70,9 +64,8 @@ public class StatusBadge extends JLabel implements TableCellRenderer {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Paint badge background
         g2.setColor(badgeColor);
-        // Pill shape: arc width is height of component
+
         g2.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, Theme.CORNER_RADIUS * 2, Theme.CORNER_RADIUS * 2);
 
         g2.dispose();

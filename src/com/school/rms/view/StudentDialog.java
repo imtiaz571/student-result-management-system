@@ -7,17 +7,20 @@ import com.school.rms.model.Student;
 import com.school.rms.util.Theme;
 
 public class StudentDialog extends JDialog {
+    private JTextField idField;
     private JTextField nameField;
     private JComboBox<String> sessionCombo;
     private JTextField batchField;
     private JTextField departmentField;
 
     private Student student;
+    private java.util.List<Student> allStudents;
     private boolean confirmed = false;
 
-    public StudentDialog(JFrame parent, Student student) {
+    public StudentDialog(JFrame parent, Student student, java.util.List<Student> allStudents) {
         super(parent, student == null ? "Add Student" : "Edit Student", true);
         this.student = student;
+        this.allStudents = allStudents;
         initializeUI();
 
         if (student != null) {
@@ -26,12 +29,11 @@ public class StudentDialog extends JDialog {
     }
 
     private void initializeUI() {
-        setSize(500, 400);
+        setSize(500, 450); // Increased height to accommodate ID field
         setLocationRelativeTo(getParent());
         setLayout(new BorderLayout(10, 10));
         getContentPane().setBackground(Color.WHITE);
 
-        // Main form panel
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(Color.WHITE);
         formPanel.setBorder(new EmptyBorder(20, 30, 20, 30));
@@ -42,8 +44,18 @@ public class StudentDialog extends JDialog {
         gbc.gridx = 0;
         gbc.weightx = 0.3;
 
-        // Student Name
+        // ID Field
         gbc.gridy = 0;
+        formPanel.add(createLabel("Student ID:"), gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        idField = new JTextField(20);
+        idField.setPreferredSize(new Dimension(200, 35));
+        formPanel.add(idField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.3;
         formPanel.add(createLabel("Student Name:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 0.7;
@@ -51,9 +63,8 @@ public class StudentDialog extends JDialog {
         nameField.setPreferredSize(new Dimension(200, 35));
         formPanel.add(nameField, gbc);
 
-        // Session
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.weightx = 0.3;
         formPanel.add(createLabel("Session:"), gbc);
         gbc.gridx = 1;
@@ -64,9 +75,8 @@ public class StudentDialog extends JDialog {
         sessionCombo.setFont(Theme.FONT_REGULAR);
         formPanel.add(sessionCombo, gbc);
 
-        // Batch
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.weightx = 0.3;
         formPanel.add(createLabel("Batch:"), gbc);
         gbc.gridx = 1;
@@ -75,9 +85,8 @@ public class StudentDialog extends JDialog {
         batchField.setPreferredSize(new Dimension(200, 35));
         formPanel.add(batchField, gbc);
 
-        // Department
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.weightx = 0.3;
         formPanel.add(createLabel("Department:"), gbc);
         gbc.gridx = 1;
@@ -86,16 +95,14 @@ public class StudentDialog extends JDialog {
         departmentField.setPreferredSize(new Dimension(200, 35));
         formPanel.add(departmentField, gbc);
 
-        // Note about CGPA
         JLabel noteLabel = new JLabel("<html><i>Note: Overall CGPA will be calculated from subjects</i></html>");
         noteLabel.setFont(new Font("Arial", Font.ITALIC, 11));
         noteLabel.setForeground(Color.GRAY);
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
         formPanel.add(noteLabel, gbc);
 
-        // Button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.setBorder(new EmptyBorder(0, 20, 20, 20));
@@ -142,6 +149,8 @@ public class StudentDialog extends JDialog {
     }
 
     private void populateFields() {
+        idField.setText(student.getId());
+
         nameField.setText(student.getName());
         sessionCombo.setSelectedItem(student.getSession());
         batchField.setText(student.getBatch());
@@ -149,6 +158,30 @@ public class StudentDialog extends JDialog {
     }
 
     private boolean validateFields() {
+        String enteredId = idField.getText().trim();
+        if (enteredId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Student ID is required", "Validation Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Check for uniqueness
+        if (allStudents != null) {
+            for (Student s : allStudents) {
+                // If editing (student != null), skip if we found ourselves
+                if (student != null && s == student) {
+                    continue;
+                }
+
+                if (s.getId().equalsIgnoreCase(enteredId)) {
+                    JOptionPane.showMessageDialog(this,
+                            "Student ID must be unique. ID '" + enteredId + "' already exists.", "Validation Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+        }
+
         if (nameField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Student Name is required", "Validation Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -172,8 +205,9 @@ public class StudentDialog extends JDialog {
     }
 
     public Student getStudent() {
-        // If editing existing student, update it directly
+
         if (student != null) {
+            student.setId(idField.getText().trim());
             student.setName(nameField.getText().trim());
             student.setSession((String) sessionCombo.getSelectedItem());
             student.setBatch(batchField.getText().trim());
@@ -181,10 +215,8 @@ public class StudentDialog extends JDialog {
             return student;
         }
 
-        // If adding new student, create new object
-        String id = String.valueOf(System.currentTimeMillis());
         Student newStudent = new Student(
-                id,
+                idField.getText().trim(),
                 nameField.getText().trim(),
                 (String) sessionCombo.getSelectedItem(),
                 batchField.getText().trim(),

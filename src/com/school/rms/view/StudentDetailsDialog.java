@@ -25,13 +25,13 @@ public class StudentDetailsDialog extends JDialog {
         setLayout(new BorderLayout(10, 10));
         getContentPane().setBackground(Color.WHITE);
 
-        // Student info panel at top
+        
         JPanel infoPanel = createStudentInfoPanel();
 
-        // Subjects table
+        
         JPanel tablePanel = createSubjectsTablePanel();
 
-        // Button panel
+        
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonPanel.setBackground(Color.WHITE);
 
@@ -79,7 +79,7 @@ public class StudentDetailsDialog extends JDialog {
         JLabel deptLabel = new JLabel("Department: " + student.getDepartment());
         deptLabel.setFont(Theme.FONT_REGULAR);
 
-        // Check if student failed (CGPA = 0)
+        
         double cgpa = student.getOverallCGPA();
         String cgpaText = String.format("Overall CGPA: %.2f", cgpa);
         if (cgpa == 0.00) {
@@ -108,12 +108,12 @@ public class StudentDetailsDialog extends JDialog {
         panel.setBackground(Color.WHITE);
         panel.setBorder(new EmptyBorder(10, 30, 20, 30));
 
-        // Title
+        
         JLabel titleLabel = new JLabel("Subject Details");
         titleLabel.setFont(Theme.FONT_BOLD);
         titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
 
-        // Create table with Letter Grade and Remarks
+        
         String[] columnNames = { "Subject Name", "Marks", "Letter Grade", "CGPA", "Remarks" };
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -141,7 +141,7 @@ public class StudentDetailsDialog extends JDialog {
         table.setShowVerticalLines(false);
         table.setIntercellSpacing(new Dimension(0, 0));
 
-        // Color code failed subjects
+        
         table.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
@@ -178,7 +178,7 @@ public class StudentDetailsDialog extends JDialog {
         dialog.setVisible(true);
 
         if (dialog.isDataChanged()) {
-            // Refresh this dialog
+            
             dispose();
             new StudentDetailsDialog((JFrame) parent, student).setVisible(true);
         }

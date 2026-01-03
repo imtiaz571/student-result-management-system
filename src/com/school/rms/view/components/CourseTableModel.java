@@ -37,7 +37,7 @@ public class CourseTableModel extends AbstractTableModel {
             case 1:
                 return course.getBatch();
             case 2:
-                return course.getSubject(); // Using Subject as Topic
+                return course.getSubject(); 
             case 3:
                 return course.getTeacher();
             case 4:
@@ -45,7 +45,7 @@ public class CourseTableModel extends AbstractTableModel {
             case 5:
                 return course.getPublicationStatus();
             case 6:
-                return ""; // Actions column
+                return ""; 
             default:
                 return "";
         }
@@ -53,7 +53,7 @@ public class CourseTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex == 6; // Only actions are clickable usually, but we implement via editor/renderer.
-        // For basic table, we might just use buttons.
+        return columnIndex == 6; 
+        
     }
 }
